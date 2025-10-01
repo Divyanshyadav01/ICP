@@ -1,0 +1,57 @@
+// 1. Merge Sorted Array (88)
+class Solution88 {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int i = m - 1, j = n - 1, k = m + n - 1;
+        while (i >= 0 && j >= 0) {
+            if (nums1[i] > nums2[j]) nums1[k--] = nums1[i--];
+            else nums1[k--] = nums2[j--];
+        }
+        while (j >= 0) nums1[k--] = nums2[j--];
+    }
+}
+
+// 2. Kth Largest Element in an Array (215)
+import java.util.Random;
+class Solution215 {
+    Random rand = new Random();
+    public int findKthLargest(int[] nums, int k) {
+        return quickSelect(nums, 0, nums.length - 1, nums.length - k);
+    }
+    private int quickSelect(int[] nums, int left, int right, int k) {
+        if (left == right) return nums[left];
+        int pivotIndex = partition(nums, left, right);
+        if (pivotIndex == k) return nums[pivotIndex];
+        else if (pivotIndex < k) return quickSelect(nums, pivotIndex + 1, right, k);
+        else return quickSelect(nums, left, pivotIndex - 1, k);
+    }
+    private int partition(int[] nums, int left, int right) {
+        int pivotIndex = left + rand.nextInt(right - left + 1);
+        int pivot = nums[pivotIndex];
+        swap(nums, pivotIndex, right);
+        int storeIndex = left;
+        for (int i = left; i < right; i++) {
+            if (nums[i] < pivot) swap(nums, storeIndex++, i);
+        }
+        swap(nums, storeIndex, right);
+        return storeIndex;
+    }
+    private void swap(int[] nums, int i, int j) {
+        int t = nums[i]; nums[i] = nums[j]; nums[j] = t;
+    }
+}
+
+// 3. Valid Perfect Square (367)
+class Solution367 {
+    public boolean isPerfectSquare(int num) {
+        if (num < 2) return true;
+        long left = 2, right = num / 2;
+        while (left <= right) {
+            long mid = left + (right - left) / 2;
+            long sq = mid * mid;
+            if (sq == num) return true;
+            if (sq < num) left = mid + 1;
+            else right = mid - 1;
+        }
+        return false;
+    }
+}
