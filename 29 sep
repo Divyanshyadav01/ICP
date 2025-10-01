@@ -1,0 +1,65 @@
+// 1. Search a 2D Matrix
+class Solution74 {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int m = matrix.length, n = matrix[0].length;
+        int left = 0, right = m * n - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            int val = matrix[mid / n][mid % n];
+            if (val == target) return true;
+            else if (val < target) left = mid + 1;
+            else right = mid - 1;
+        }
+        return false;
+    }
+}
+
+// 2. Spiral Matrix
+import java.util.*;
+class Solution54 {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> result = new ArrayList<>();
+        if (matrix.length == 0) return result;
+        int top = 0, bottom = matrix.length - 1;
+        int left = 0, right = matrix[0].length - 1;
+        while (top <= bottom && left <= right) {
+            for (int i = left; i <= right; i++) result.add(matrix[top][i]);
+            top++;
+            for (int i = top; i <= bottom; i++) result.add(matrix[i][right]);
+            right--;
+            if (top <= bottom) {
+                for (int i = right; i >= left; i--) result.add(matrix[bottom][i]);
+                bottom--;
+            }
+            if (left <= right) {
+                for (int i = bottom; i >= top; i--) result.add(matrix[i][left]);
+                left++;
+            }
+        }
+        return result;
+    }
+}
+
+// 3. Number of Islands
+class Solution200 {
+    public int numIslands(char[][] grid) {
+        int count = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == '1') {
+                    dfs(grid, i, j);
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    private void dfs(char[][] grid, int i, int j) {
+        if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length || grid[i][j] == '0') return;
+        grid[i][j] = '0';
+        dfs(grid, i + 1, j);
+        dfs(grid, i - 1, j);
+        dfs(grid, i, j + 1);
+        dfs(grid, i, j - 1);
+    }
+}
