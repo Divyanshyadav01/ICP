@@ -1,0 +1,89 @@
+// 1. Longest Substring Without Repeating Characters (3)
+import java.util.*;
+class Solution3 {
+    public int lengthOfLongestSubstring(String s) {
+        Set<Character> set = new HashSet<>();
+        int left = 0, maxLen = 0;
+        for (int right = 0; right < s.length(); right++) {
+            while (set.contains(s.charAt(right))) {
+                set.remove(s.charAt(left++));
+            }
+            set.add(s.charAt(right));
+            maxLen = Math.max(maxLen, right - left + 1);
+        }
+        return maxLen;
+    }
+}
+
+// 2. Permutation in String (567)
+class Solution567 {
+    public boolean checkInclusion(String s1, String s2) {
+        if (s1.length() > s2.length()) return false;
+        int[] count1 = new int[26];
+        int[] count2 = new int[26];
+        for (char c : s1.toCharArray()) count1[c - 'a']++;
+        for (int i = 0; i < s2.length(); i++) {
+            count2[s2.charAt(i) - 'a']++;
+            if (i >= s1.length()) {
+                count2[s2.charAt(i - s1.length()) - 'a']--;
+            }
+            if (Arrays.equals(count1, count2)) return true;
+        }
+        return false;
+    }
+}
+
+// 3. Find All Anagrams in a String (438)
+class Solution438 {
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer> result = new ArrayList<>();
+        if (s.length() < p.length()) return result;
+        int[] countP = new int[26];
+        int[] countS = new int[26];
+        for (char c : p.toCharArray()) countP[c - 'a']++;
+        for (int i = 0; i < s.length(); i++) {
+            countS[s.charAt(i) - 'a']++;
+            if (i >= p.length()) {
+                countS[s.charAt(i - p.length()) - 'a']--;
+            }
+            if (Arrays.equals(countP, countS)) {
+                result.add(i - p.length() + 1);
+            }
+        }
+        return result;
+    }
+}
+
+// 4. Longest Repeating Character Replacement (424)
+class Solution424 {
+    public int characterReplacement(String s, int k) {
+        int[] count = new int[26];
+        int left = 0, maxCount = 0, maxLen = 0;
+        for (int right = 0; right < s.length(); right++) {
+            count[s.charAt(right) - 'A']++;
+            maxCount = Math.max(maxCount, count[s.charAt(right) - 'A']);
+            while ((right - left + 1) - maxCount > k) {
+                count[s.charAt(left) - 'A']--;
+                left++;
+            }
+            maxLen = Math.max(maxLen, right - left + 1);
+        }
+        return maxLen;
+    }
+}
+
+// 5. Max Consecutive Ones III (1004)
+class Solution1004 {
+    public int longestOnes(int[] nums, int k) {
+        int left = 0, zeros = 0, maxLen = 0;
+        for (int right = 0; right < nums.length; right++) {
+            if (nums[right] == 0) zeros++;
+            while (zeros > k) {
+                if (nums[left] == 0) zeros--;
+                left++;
+            }
+            maxLen = Math.max(maxLen, right - left + 1);
+        }
+        return maxLen;
+    }
+}
